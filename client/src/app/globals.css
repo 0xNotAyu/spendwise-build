@@ -1,0 +1,186 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ============================================================
+   SpendWise design tokens — "ledger" aesthetic.
+   A personal passbook/ledger feel: warm paper, deep ledger ink-green,
+   a single stamp-gold accent used sparingly, hairline rules instead
+   of soft shadow cards. Built for INR, tabular numerals everywhere.
+   ============================================================ */
+
+:root {
+  --radius: 0.5rem;
+
+  /* Core palette */
+  --paper: #f6f2e8;
+  --paper-raised: #fffcf5;
+  --ink: #1b1a17;
+  --ink-soft: #56524a;
+  --rule: #ddd3bd;
+  --rule-soft: #e9e1cd;
+  --ledger: #234b3c;
+  --ledger-deep: #163229;
+  --ledger-tint: #e3ebe3;
+  --gold: #a9791f;
+  --gold-tint: #f3e6c8;
+  --rust: #8f3b2c;
+  --rust-tint: #f3e0da;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+
+  --popover: var(--paper-raised);
+  --popover-foreground: var(--ink);
+
+  --primary: var(--ledger);
+  --primary-foreground: #f6f2e8;
+
+  --secondary: var(--ledger-tint);
+  --secondary-foreground: var(--ledger-deep);
+
+  --muted: #efe9da;
+  --muted-foreground: var(--ink-soft);
+
+  --accent: var(--gold-tint);
+  --accent-foreground: #4d3812;
+
+  --destructive: var(--rust);
+  --destructive-foreground: #fdf4f1;
+
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--ledger);
+
+  --font-display: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-numeric: ui-monospace, "SF Mono", "Roboto Mono", "Cascadia Code", monospace;
+}
+
+.dark {
+  --paper: #14140f;
+  --paper-raised: #1b1b14;
+  --ink: #efe9da;
+  --ink-soft: #b7ae9a;
+  --rule: #37362a;
+  --rule-soft: #2a2a20;
+  --ledger: #6fae8e;
+  --ledger-deep: #a8d6bd;
+  --ledger-tint: #1e2b23;
+  --gold: #d3ab5b;
+  --gold-tint: #2c2413;
+  --rust: #d98269;
+  --rust-tint: #2e1c17;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+  --popover: var(--paper-raised);
+  --popover-foreground: var(--ink);
+  --primary: var(--ledger);
+  --primary-foreground: #0e1a14;
+  --secondary: var(--ledger-tint);
+  --secondary-foreground: var(--ledger-deep);
+  --muted: #201f17;
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--gold-tint);
+  --accent-foreground: #e9cd93;
+  --destructive: var(--rust);
+  --destructive-foreground: #2e1c17;
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--ledger);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-ledger: var(--ledger);
+  --color-ledger-deep: var(--ledger-deep);
+  --color-ledger-tint: var(--ledger-tint);
+  --color-gold: var(--gold);
+  --color-gold-tint: var(--gold-tint);
+  --color-rust: var(--rust);
+  --color-rust-tint: var(--rust-tint);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+  --color-ink-soft: var(--ink-soft);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-numeric: var(--font-numeric);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+  ::selection {
+    background: var(--ledger);
+    color: var(--primary-foreground);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-numeric {
+    font-family: var(--font-numeric);
+    font-variant-numeric: tabular-nums;
+  }
+  .num {
+    font-family: var(--font-numeric);
+    font-variant-numeric: tabular-nums;
+  }
+  .ledger-rule {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 34px,
+      var(--rule-soft) 34px,
+      var(--rule-soft) 35px
+    );
+  }
+  .paper-texture {
+    background-image: radial-gradient(circle at 1px 1px, var(--rule-soft) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}
