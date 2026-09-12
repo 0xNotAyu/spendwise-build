@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import Category from '../models/Category';
 import { AuthRequest } from '../middleware/auth';
+import { serializeCategory } from '../utils/serializers';
 
 export const getCategories = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -11,7 +12,9 @@ export const getCategories = async (req: AuthRequest, res: Response): Promise<vo
       ],
     }).sort({ isDefault: -1, name: 1 });
 
-    res.json({ categories });
+    // Client expects a bare array of categories (with `id`, not `_id`),
+    // not `{ categories: [...] }`.
+    res.json(categories.map(serializeCategory));
   } catch (error) {
     console.error('Get categories error:', error);
     res.status(500).json({ error: 'Failed to get categories' });
@@ -37,10 +40,8 @@ export const createCategory = async (req: AuthRequest, res: Response): Promise<v
 
     await category.save();
 
-    res.status(201).json({
-      message: 'Category created successfully',
-      category,
-    });
+    // Bare, serialized category — matches client's `Category` type.
+    res.status(201).json(serializeCategory(category));
   } catch (error) {
     console.error('Create category error:', error);
     res.status(500).json({ error: 'Failed to create category' });
@@ -69,10 +70,7 @@ export const updateCategory = async (req: AuthRequest, res: Response): Promise<v
 
     await category.save();
 
-    res.json({
-      message: 'Category updated successfully',
-      category,
-    });
+    res.json(serializeCategory(category));
   } catch (error) {
     console.error('Update category error:', error);
     res.status(500).json({ error: 'Failed to update category' });

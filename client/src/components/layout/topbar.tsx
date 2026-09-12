@@ -12,9 +12,12 @@ import {
   LogOut,
   Settings,
   BookOpenText,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Switch } from "@/components/ui/switch";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 import { initials } from "@/lib/format";
 
 const navItems = [
@@ -45,6 +49,7 @@ const titles: Record<string, string> = {
 
 export function Topbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
   const base = "/" + pathname.split("/")[1];
@@ -95,6 +100,17 @@ export function Topbar() {
           <DropdownMenuItem onSelect={() => router.push("/settings")}>
             <Settings className="size-4" /> Settings
           </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault();
+              toggleTheme();
+            }}
+          >
+            {theme === "dark" ? <Moon className="size-4" /> : <Sun className="size-4" />}
+            <span className="flex-1">Dark mode</span>
+            <Switch checked={theme === "dark"} className="pointer-events-none" />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onSelect={() => logout()}>
             <LogOut className="size-4" /> Log out
           </DropdownMenuItem>

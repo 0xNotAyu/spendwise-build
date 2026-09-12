@@ -1,11 +1,14 @@
 import { Response } from 'express';
 import Transaction from '../models/Transaction';
 import { AuthRequest } from '../middleware/auth';
+import { serializeTransaction } from '../utils/serializers';
 
 export const getTransactions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
+    // Client sends `pageSize`; keep `limit` as a fallback for direct API callers.
+    const limit =
+      parseInt(req.query.pageSize as string) || parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
 
     // Build filter
@@ -59,14 +62,13 @@ export const getTransactions = async (req: AuthRequest, res: Response): Promise<
 
     const total = await Transaction.countDocuments(filter);
 
+    // Client expects `Paginated<Transaction>`: { items, total, page, pageSize, totalPages }.
     res.json({
-      transactions,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
-      },
+      items: transactions.map(serializeTransaction),
+      total,
+      page,
+      pageSize: limit,
+      totalPages: Math.ceil(total / limit),
     });
   } catch (error) {
     console.error('Get transactions error:', error);
@@ -86,7 +88,7 @@ export const getTransaction = async (req: AuthRequest, res: Response): Promise<v
       return;
     }
 
-    res.json({ transaction });
+    res.json(serializeTransaction(transaction));
   } catch (error) {
     console.error('Get transaction error:', error);
     res.status(500).json({ error: 'Failed to get transaction' });
@@ -130,10 +132,7 @@ export const createTransaction = async (req: AuthRequest, res: Response): Promis
     await transaction.save();
     await transaction.populate('categoryId', 'name icon type');
 
-    res.status(201).json({
-      message: 'Transaction created successfully',
-      transaction,
-    });
+    res.status(201).json(serializeTransaction(transaction));
   } catch (error) {
     console.error('Create transaction error:', error);
     res.status(500).json({ error: 'Failed to create transaction' });
@@ -177,10 +176,7 @@ export const updateTransaction = async (req: AuthRequest, res: Response): Promis
     await transaction.save();
     await transaction.populate('categoryId', 'name icon type');
 
-    res.json({
-      message: 'Transaction updated successfully',
-      transaction,
-    });
+    res.json(serializeTransaction(transaction));
   } catch (error) {
     console.error('Update transaction error:', error);
     res.status(500).json({ error: 'Failed to update transaction' });
