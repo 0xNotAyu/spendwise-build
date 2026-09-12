@@ -13,18 +13,18 @@ export interface RegisterPayload {
 }
 
 export interface AuthResponse {
-  user: User;
   token: string;
+  user: User;
 }
 
 export async function login(payload: LoginPayload) {
-  const { data } = await apiClient.post<AuthResponse>("/auth/login", payload);
-  return data;
+  const { data } = await apiClient.post<{ message: string; token: string; user: User }>("/auth/login", payload);
+  return { token: data.token, user: data.user };
 }
 
 export async function register(payload: RegisterPayload) {
-  const { data } = await apiClient.post<AuthResponse>("/auth/register", payload);
-  return data;
+  const { data } = await apiClient.post<{ message: string; token: string; user: User }>("/auth/register", payload);
+  return { token: data.token, user: data.user };
 }
 
 export async function logout() {
@@ -32,8 +32,8 @@ export async function logout() {
 }
 
 export async function getCurrentUser() {
-  const { data } = await apiClient.get<User>("/auth/me");
-  return data;
+  const { data } = await apiClient.get<{ user: User }>("/auth/me");
+  return data.user;
 }
 
 export interface UpdateProfilePayload {
@@ -44,8 +44,8 @@ export interface UpdateProfilePayload {
 }
 
 export async function updateProfile(payload: UpdateProfilePayload) {
-  const { data } = await apiClient.patch<User>("/users/me", payload);
-  return data;
+  const { data } = await apiClient.put<{ message: string; user: User }>("/users/me", payload);
+  return data.user;
 }
 
 export async function changePassword(payload: { currentPassword: string; newPassword: string }) {

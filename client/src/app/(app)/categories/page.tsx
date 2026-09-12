@@ -23,10 +23,15 @@ export default function CategoriesPage() {
   const [editing, setEditing] = useState<Category | null>(null);
   const [deleting, setDeleting] = useState<Category | null>(null);
 
-  const { data: categories, isLoading, isError, refetch } = useCategories();
+  
   const deleteCategory = useDeleteCategory();
 
-  const filtered = (categories ?? []).filter((c) => c.type === tab);
+
+const { data, isLoading, isError, refetch } = useCategories();
+
+const categories = data?.categories ?? [];
+
+const filtered = categories.filter((c) => c.type === tab);
 
   async function handleDelete() {
     if (!deleting) return;

@@ -33,12 +33,16 @@ export default function RegisterPage() {
   });
 
   async function onSubmit(values: z.infer<typeof schema>) {
+    console.log("Form submitted with values:", values);
     setIsSubmitting(true);
     try {
+      console.log("Calling registerUser...");
       await registerUser(values.name, values.email, values.password);
+      console.log("Registration successful");
       toast.success("Account created");
       router.push("/dashboard");
     } catch (err) {
+      console.error("Registration error:", err);
       toast.error(extractErrorMessage(err, "Couldn't create your account"));
     } finally {
       setIsSubmitting(false);
@@ -53,7 +57,7 @@ export default function RegisterPage() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -61,7 +65,7 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Anaya Sharma" autoComplete="name" {...field} />
+                    <Input placeholder="Anaya Sharma" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -74,7 +78,7 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                    <Input type="email" placeholder="you@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -87,17 +91,25 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" autoComplete="new-password" {...field} />
+                    <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button 
+              type="button" 
+              onClick={() => {
+                console.log("Button clicked");
+                form.handleSubmit(onSubmit)();
+              }} 
+              className="w-full" 
+              disabled={isSubmitting}
+            >
               {isSubmitting && <Loader2 className="size-4 animate-spin" />}
               Create account
             </Button>
-          </form>
+          </div>
         </Form>
         <p className="mt-6 text-center text-sm text-ink-soft">
           Already have an account?{" "}

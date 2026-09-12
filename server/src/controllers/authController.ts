@@ -39,7 +39,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       message: 'User registered successfully',
       token,
       user: {
-        id: user._id,
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         avatar: user.avatar,
@@ -85,7 +85,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       message: 'Login successful',
       token,
       user: {
-        id: user._id,
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         avatar: user.avatar,
@@ -111,7 +111,7 @@ export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<v
 
     res.json({
       user: {
-        id: user._id,
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         avatar: user.avatar,

@@ -14,7 +14,7 @@ export const getProfile = async (req: AuthRequest, res: Response): Promise<void>
 
     res.json({
       user: {
-        id: user._id,
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         avatar: user.avatar,
@@ -51,7 +51,7 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
     res.json({
       message: 'Profile updated successfully',
       user: {
-        id: user._id,
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         avatar: user.avatar,

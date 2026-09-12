@@ -7,6 +7,6 @@ export async function fetchDashboard(params: { month: number; year: number }) {
 }
 
 export async function fetchAnalytics(params: { months?: number }) {
-  const { data } = await apiClient.get<AnalyticsSummary>("/analytics", { params });
+  const { data } = await apiClient.get<AnalyticsSummary>("/dashboard/analytics", { params });
   return data;
 }

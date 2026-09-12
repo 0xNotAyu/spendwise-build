@@ -6,6 +6,8 @@ import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import transactionRoutes from './routes/transactionRoutes';
+import budgetRoutes from './routes/budgetRoutes';
+import dashboardRoutes from './routes/dashboardRoutes';
 
 dotenv.config();
 
@@ -30,8 +32,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
-// app.use('/api/budgets', budgetRoutes);
-// app.use('/api/analytics', analyticsRoutes);
+app.use('/api/budgets', budgetRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Error handling
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

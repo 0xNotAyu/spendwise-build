@@ -32,12 +32,16 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: z.infer<typeof schema>) {
+    console.log("Login form submitted with values:", values);
     setIsSubmitting(true);
     try {
+      console.log("Calling login...");
       await login(values.email, values.password);
+      console.log("Login successful");
       toast.success("Welcome back");
       router.push("/dashboard");
     } catch (err) {
+      console.error("Login error:", err);
       toast.error(extractErrorMessage(err, "Couldn't log you in"));
     } finally {
       setIsSubmitting(false);
@@ -52,7 +56,7 @@ export default function LoginPage() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="email"
@@ -60,7 +64,7 @@ export default function LoginPage() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                    <Input type="email" placeholder="you@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -73,17 +77,25 @@ export default function LoginPage() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" autoComplete="current-password" {...field} />
+                    <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button 
+              type="button" 
+              onClick={() => {
+                console.log("Login button clicked");
+                form.handleSubmit(onSubmit)();
+              }} 
+              className="w-full" 
+              disabled={isSubmitting}
+            >
               {isSubmitting && <Loader2 className="size-4 animate-spin" />}
               Log in
             </Button>
-          </form>
+          </div>
         </Form>
         <p className="mt-6 text-center text-sm text-ink-soft">
           New here?{" "}
